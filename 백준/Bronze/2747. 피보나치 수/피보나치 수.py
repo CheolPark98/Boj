@@ -1,10 +1,19 @@
-n = int(input())
-메모 = {0: 0, 1: 1, 2: 1}
+from collections import deque
+import sys
+from itertools import combinations
+
+arr = [0] * 46
+
+
 def f(n):
-    if n in 메모:
-        return 메모[n]
-    else:
-        output = f(n-1) + f(n-2)
-        메모[n] = output
-        return output
+    if n == 0:
+        return 0
+    if n == 1 or n == 2:
+        return 1
+    if arr[n] == 0:
+        arr[n] = f(n - 1) + f(n - 2)
+    return arr[n]
+
+
+n = int(input())
 print(f(n))
