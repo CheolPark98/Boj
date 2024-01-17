@@ -7,11 +7,11 @@ input = sys.stdin.readline
 INF = int(1e9)
 
 n, m, x = map(int, input().split())
-arr = [[INF] * (n + 1) for i in range(n + 1)]
+arr = [[] for i in range(n + 1)]
 
 for i in range(m):
     a, b, w = map(int, input().split())
-    arr[a][b] = w
+    arr[a].append((w, b))
 
 
 def dijkstra(s):
@@ -23,8 +23,8 @@ def dijkstra(s):
         w1, v1 = heapq.heappop(q)
         if dp[v1] < w1:
             continue
-        for v2 in range(1, n + 1):
-            d = dp[v1] + arr[v1][v2]
+        for w2, v2 in arr[v1]:
+            d = dp[v1] + w2
             if dp[v2] > d:
                 dp[v2] = d
                 heapq.heappush(q, (d, v2))
@@ -39,4 +39,3 @@ for i in range(1, n + 1):
 for i in range(1, n + 1):
     ans.append(dps[i][x] + dps[x][i])
 print(max(ans))
-
