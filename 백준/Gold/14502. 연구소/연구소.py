@@ -1,31 +1,55 @@
-from sys import stdin
 from collections import deque
-from copy import deepcopy
+import sys
+import heapq
 from itertools import combinations
+import copy
 
-def bfs(graph):
-    q = deque([(j, i) for i in range(N) for j in range(M) if graph[i][j] == 2])
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+arr = [list(map(int, input().split())) for i in range(n)]
+cnt = 0
+for i in range(n):
+    for j in range(m):
+        if arr[i][j] == 0:
+            cnt += 1
+cnt -= 3
+
+dx = [1, -1, 0, 0]
+dy = [0, 0, 1, -1]
+
+
+def bfs(carr):
+    global cnt
+    scnt = cnt
+    q = deque()
+    for i in range(n):
+        for j in range(m):
+            if carr[i][j] == 2:
+                q.append((i, j))
+
     while q:
         x, y = q.popleft()
-        for nx, ny in zip([x+1, x-1, x, x], [y, y, y+1, y-1]):
-            if 0 <= nx < M and 0 <= ny < N and not graph[ny][nx]:
-                graph[ny][nx] = 2
-                q.append((nx, ny))
-    
-    global answer
-    count = sum([i.count(0) for i in graph])
-    answer = max(answer, count)
+        for i in range(4):
+            nx, ny = x + dx[i], y + dy[i]
+
+            if 0 <= nx < n and 0 <= ny < m:
+                if carr[nx][ny] == 0:
+                    carr[nx][ny] = 2
+                    q.append((nx, ny))
+                    scnt -= 1
+    global ans
+    ans = max(scnt, ans)
 
 
-N, M = map(int, stdin.readline().split())
-graph = [list(map(int, stdin.readline().split())) for _ in range(N)]
-x_y = [(x, y) for x in range(M) for y in range(N) if not graph[y][x]]
-answer = 0
+ans = 0
+
+x_y = [(x, y) for y in range(m) for x in range(n) if not arr[x][y]]
 
 for c in combinations(x_y, 3):
-    tmp_graph = deepcopy(graph)
+    tmp = copy.deepcopy(arr)
     for x, y in c:
-        tmp_graph[y][x] = 1
-    bfs(tmp_graph)
+        tmp[x][y] = 1
+    bfs(tmp)
 
-print(answer)
+print(ans)
