@@ -8,19 +8,24 @@ input = sys.stdin.readline
 n = int(input())
 arr = list(map(int, input().split()))
 
+arr.sort()
 cnt = 0
-v = [0] * n
-for i in range(n):
-    sm = arr[i]
-    for j in range(i + 1, n):
-        sm += arr[j]
-        for k in range(n):
-            if sm == arr[k] and v[k] == 1:
-                break
-            if sm == arr[k] and v[k] == 0 and k!=j and k!=i:
-                cnt += 1
-                v[k] = 1
-                # print(sm)
-        sm -= arr[j]
 
+for i in range(n):
+    target = arr[i]
+    s, e = 0, n - 1
+    while s < e:
+        sm = arr[s] + arr[e]
+        if sm == target:
+            if s == i:
+                s += 1
+            elif e == i:
+                e -= 1
+            else:
+                cnt += 1
+                break
+        elif target > sm:
+            s += 1
+        else:
+            e -= 1
 print(cnt)
