@@ -6,24 +6,12 @@ input = sys.stdin.readline
 
 N, K = map(int, input().split())
 
-i = 0
-v = [0] * N
+people = list(range(1, N + 1))
 result = []
-for j in range(N):
+idx = 0
 
-    cnt = 0
-    while cnt < K:
-        if v[(i + 1) % N] == 1:
-            i = (i + 1) % N
-        else:
-            cnt += 1
-            i = (i + 1) % N
-
-    v[i] = 1
-    if i == 0:
-        result.append(N)
-    else:
-        result.append(i)
-
+while people:
+    idx = (idx + K - 1) % len(people)
+    result.append(people.pop(idx))
 
 print("<" + ", ".join(map(str, result)) + ">")
